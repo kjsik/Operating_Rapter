@@ -426,9 +426,9 @@ scheduler(void)
       release(&ptable.lock);
       continue;
     }
-    
+
     r = rand();
-    winner = (r % total_tickets) + 1;
+    winner = r % (total_tickets + 1);
 
     acc = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
