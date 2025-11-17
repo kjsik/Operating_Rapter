@@ -442,7 +442,7 @@ scheduler(void)
         switchuvm(p);
         p->state = RUNNING;
         
-        int start_ticks = p->ticks;
+        int start_ticks = ticks;
         swtch(&(c->scheduler), p->context);
         int end_ticks = ticks;
         p->ticks += (end_ticks - start_ticks);
@@ -455,8 +455,8 @@ scheduler(void)
       else{
         continue;
       }
-      release(&ptable.lock);
     }
+    release(&ptable.lock);
   }
   //RR
   // for(;;){
