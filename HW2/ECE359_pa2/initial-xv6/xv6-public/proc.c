@@ -401,103 +401,93 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
+
+  uint total_tickets, acc, r, winner;
   
-  // // Lottery
-  // for(;;){
-  //   // Enable interrupts on this processor.
-  //   sti();
+  static int seeded = 0;
+  if(!seeded){
+    srand(ticks);
+    seeded = 1;
+  }
 
-  //   acquire(&ptable.lock);
-
-  //   // 1) RUNNABLE 프로세스들의 티켓 합 구하기
-  //   int total_tickets = 0;
-  //   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-  //     if(p->state != RUNNABLE)
-  //       continue;
-  //     if(p->tickets <= 0)
-  //       continue;
-  //     total_tickets += p->tickets;
-  //   }
-
-  //   // 실행 가능한 프로세스가 없다면 그냥 다음 루프로
-  //   if(total_tickets == 0){
-  //     release(&ptable.lock);
-  //     continue;
-  //   }
-
-  //   // 2) 0 ~ total_tickets-1 중 하나를 랜덤 선택
-  //   int winner = rand() % total_tickets;
-  //   int cur = 0;
-  //   struct proc *chosen = 0;
-
-  //   // 3) 누적 티켓이 winner를 처음 넘는 프로세스를 선택
-  //   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-  //     if(p->state != RUNNABLE)
-  //       continue;
-  //     if(p->tickets <= 0)
-  //       continue;
-
-  //     cur += p->tickets;
-  //     if(cur > winner){
-  //       chosen = p;
-  //       break;
-  //     }
-  //   }
-
-  //   // 방어 코드: 혹시라도 못 찾았으면 그냥 넘어감
-  //   if(chosen != 0){
-  //     c->proc = chosen;
-  //     switchuvm(chosen);
-  //     chosen->state = RUNNING;
-
-  //     // 실행 전 ticks 스냅샷
-  //     int start_ticks = ticks;
-
-  //     swtch(&c->scheduler, chosen->context);
-  //     switchkvm();
-
-  //     // 실행한 만큼 ticks 누적
-  //     chosen->ticks += ticks - start_ticks;
-
-  //     c->proc = 0;
-  //   }
-
-  //   release(&ptable.lock);
-  // }
-
-
-  //RR
   for(;;){
-    // Enable interrupts on this processor.
     sti();
 
-    // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+
+    total_tickets = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state != RUNNABLE)
+        continue;
+      total_tickets += p->tickets;
+    }
+
+    if(total_tickets == 0){
+      release(&ptable.lock);
+      continue;
+    }
+    
+    r = rand();
+    winner = (r % total_tickets) + 1;
+
+    acc = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+      acc += p->tickets;
 
-      const int tickstarts = ticks;
+      if(acc >= winner){
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        
+        int start_ticks = p->ticks;
+        swtch(&(c->scheduler), p->context);
+        int end_ticks = ticks;
+        p->ticks += (end_ticks - start_ticks);
+        
+        switchkvm();
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
+        c->proc = 0;
+        break;
+      }
 
-      p->ticks += ticks - tickstarts;
-
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
+      release(&ptable.lock);
     }
-    release(&ptable.lock);
-
   }
+  //RR
+  // for(;;){
+  //   // Enable interrupts on this processor.
+  //   sti();
+
+  //   // Loop over process table looking for process to run.
+  //   acquire(&ptable.lock);
+  //   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+  //     if(p->state != RUNNABLE)
+  //       continue;
+
+  //     // Switch to chosen process.  It is the process's job
+  //     // to release ptable.lock and then reacquire it
+  //     // before jumping back to us.
+  //     c->proc = p;
+  //     switchuvm(p);
+  //     p->state = RUNNING;
+
+  //     const int tickstarts = ticks;
+
+  //     swtch(&(c->scheduler), p->context);
+  //     switchkvm();
+
+  //     p->ticks += ticks - tickstarts;
+
+  //     // Process is done running for now.
+  //     // It should have changed its p->state before coming back.
+  //     c->proc = 0;
+  //   }
+  //   release(&ptable.lock);
+
+  // }
 }
 
 // Enter scheduler.  Must hold only ptable.lock
