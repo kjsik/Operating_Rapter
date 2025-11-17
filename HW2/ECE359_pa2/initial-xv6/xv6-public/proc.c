@@ -422,11 +422,6 @@ scheduler(void)
       }
     }
 
-    if(total_tickets == 0){
-      release(&ptable.lock);
-      continue;
-    }
-    
     r = rand();
     winner = (r % total_tickets) + 1;
 
