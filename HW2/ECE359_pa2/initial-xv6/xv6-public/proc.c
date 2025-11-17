@@ -446,13 +446,15 @@ scheduler(void)
         swtch(&(c->scheduler), p->context);
         int end_ticks = ticks;
         p->ticks += (end_ticks - start_ticks);
-        
+
         switchkvm();
 
         c->proc = 0;
         break;
       }
-
+      else{
+        continue;
+      }
       release(&ptable.lock);
     }
   }
