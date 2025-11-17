@@ -417,9 +417,9 @@ scheduler(void)
 
     total_tickets = 0;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
-      total_tickets += p->tickets;
+      if(p->state == RUNNABLE){
+        total_tickets += p->tickets;
+      }
     }
 
     if(total_tickets == 0){
@@ -442,12 +442,11 @@ scheduler(void)
         switchuvm(p);
         p->state = RUNNING;
         
-        int start_ticks = ticks;
+        const int tickstarts = ticks;
         swtch(&(c->scheduler), p->context);
-        int end_ticks = ticks;
-        p->ticks += (end_ticks - start_ticks);
-
         switchkvm();
+
+        p->ticks += ticks - tickstarts;
 
         c->proc = 0;
         break;
