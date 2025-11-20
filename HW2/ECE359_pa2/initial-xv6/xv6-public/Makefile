@@ -182,7 +182,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_test\
-	#_test_lottery\
+	_test_lottery\
 	#_test_currency\
 
 fs.img: mkfs README $(UPROGS)

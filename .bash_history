@@ -408,3 +408,160 @@ ls
 ./test-getreadcount.sh 
 quit
 exit
+ls
+cd HW
+cd HW2
+ls
+cd ECE359_pa2/
+ls
+cd initial-xv6/
+ls
+cd xv6-public/
+git clone https://github.com/kjsik/Operating_System.git
+ls
+cd Operating_System/
+ls
+cd initial-xv6/
+ls
+cd xv6-public/
+ls
+vim syscall.
+vim syscall.h
+ls
+cd ../../
+cd ..
+ls
+rm Operating_System/
+make qemu-nox
+rm -r Operating_System/
+cd Operating_System/
+ls
+cd ..
+rmdir Operating_System/
+cd Operating_System/
+ls -a
+rm .git/
+rm -r .git/
+cd ..
+cd
+ls
+cd Chapter_homework/
+ls
+vim a.out 
+cd ..
+git init
+git remote add origin https://github.com/kjsik/Operating_Rapter.git
+git add .
+rm -rf HW1/HW1_unix-utilities/.git
+rm -rf HW2/ECE359_pa2/.git
+git add .
+git commit -m "upload all projects"
+git config --global user.name "kjsik"
+git config --global user.email "kjs17766@ajou.ac.kr"
+git commit -m "upload all projects"
+git push -u origin main
+git branch
+git branch -M main
+git branch
+git push -u origin main
+ssh-keygen -t ed25519 -C "kjsik@github.com"
+cat ~/.ssh/id_ed25519.pub
+git remote set-url origin git@github.com:kjsik/Operating_Rapter.git
+git push -u origin main
+cd HW2
+ls
+cd ECE359_pa2/
+ls
+cd initial-xv6/
+cd ..
+cd HW2
+cd ECE359_pa2/
+ls -al
+cd ..
+git rm --cached HW2/ECE359_pa2/
+ls
+cd HW
+cd HW2/
+ls
+cd ECE359_pa2/
+ls
+cd initial-xv6/
+ls
+ls -al
+cd ..
+git add HW2/ECE359_pa2
+git status
+git commit -m "Add ECE359_pa2 directory contents"
+git push
+git pull
+cd HW2/ECE359_pa2/
+ls
+cd initial-xv6/
+ls
+cd xv6-public/
+ls
+vim sysfile.c
+vim syscall.c
+ls
+cd ..
+cd 
+cd HW2/ECE359_pa2/initial-xv6/
+ls
+cd tests
+ls
+vim test_1.c
+cd ..
+cd xv6-public/
+ls
+vim Makefile
+vim test.c
+vim test_lottery.c 
+vim Makefile.test
+vim Makefile
+vim Makefile.test
+vim Makefile
+make qemu-nox
+ls
+make qemu-nox
+exit
+ls
+cd HW2/ECE359_pa2/
+cd initial-xv6/
+cd xv6-public/
+ls
+vim syscall.h
+make qemu-nox
+ls
+vim syscall.c
+vim sysproc.c
+vim proc.c
+cd 
+git pull
+cd HW2/ECE359_pa2/initial-xv6/xv6-public/
+vim proc.c
+make qemu-nox
+exit
+cd HW2/ECE359_pa2/initial-xv6/xv6-public/
+gdb kernel
+ls
+vim proc.c
+make qemu-nox
+gdp remote localhost 26035
+gdb kernel
+make qemu-no
+gdv kernel
+gdb kernel
+vim proc.c
+cd
+cd HW2/ECE359_pa2/initial-xv6/
+ls
+cd tests
+ls
+cd ..
+ls
+cd xv6-public/
+ls
+./_forktest 
+vim test_lottery.c
+quit
+exit
