@@ -565,3 +565,17 @@ ls
 vim test_lottery.c
 quit
 exit
+git status
+git add .
+git commit -m "Server Update"
+git push origin main
+cd HW2/ECE359_pa2/initial-xv6/xv6-public/
+make qemu-nox
+cd
+git remote set-url origin git@github.com:kjsik/Operating_Rapter.git
+git push origin main
+git remote set-url origin kjsik@github.com:kjsik/Operating_Rapter.git
+git push origin main
+git remote set-url origin git@github.com:kjsik/Operating_Rapter.git
+git push -u origin main
+exit
